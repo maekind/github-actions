@@ -1,0 +1,48 @@
+name: Testing 🧪 and Coverage Report Generation 📝
+description: Run tests, linting, and coverage report generation for a Python project.
+
+inputs:
+  python_version:
+    description: The version of Python to use for testing.
+    required: true
+    default: "3.12"
+  coverage_path:
+    description: The path to the code for coverage reporting.
+    required: true
+    default: "./src"  # Default path for coverage
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+
+    - name: Set up Python ${{ inputs.python_version }}
+      run: uv python install ${{ inputs.python_version }}
+      shell: bash
+
+    - name: Install the project
+      run: uv sync --all-extras --dev
+      shell: bash
+
+    - name: Run linter
+      run: |
+        set -e
+        uv run ruff check
+      shell: bash
+
+    - name: Test with pytest (with coverage)
+      run: |
+        uv run pytest tests -v --cov=${{ inputs.coverage_path }} --cov-report=xml:./coverage.xml --cov-report term-missing || (test $? -eq 5 && exit 0)
+      shell: bash
+
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage_file
+        path: ./coverage.xml
+        if-no-files-found: error
+        overwrite: true

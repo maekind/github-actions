@@ -1,0 +1,25 @@
+name: Create Release
+
+description: Create a GitHub release when a new tag is pushed.
+
+inputs:
+  tag_name:
+    description: 'The tag name for the release'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@main
+
+    - name: New release
+      id: create_release
+      uses: actions/create-release@latest
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        tag_name: ${{ inputs.tag_name }}
+        release_name: Release ${{ inputs.tag_name }}
+        draft: false
+        prerelease: false

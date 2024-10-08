@@ -1,0 +1,51 @@
+name: Bump Version
+description: Bumps the version in the input file, defaulting to minor unless minor = 999, then increments major.
+
+inputs:
+  file:
+    description: The path to the input file to be modified, containing the version.
+    required: true
+  gh_token:
+    description: 'GitHub token for authentication'
+    required: true
+
+outputs:
+  new_version:
+    description: The new version after bumping.
+    value: ${{ steps.bump.outputs.new_version }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout project repository
+      uses: actions/checkout@v4  # Checkout the repository where this action is triggered
+
+    - name: Checkout GitHub Actions repository
+      uses: actions/checkout@v4  # Checkout the repository containing the action (github-actions repo)
+      with:
+        repository: maekind/github-actions
+        path: github-actions  # Checkout it into a subfolder
+        ref: main
+        token: ${{ inputs.gh_token }}
+
+    - name: Make bump-version.sh executable
+      run: chmod +x ${{ github.workspace }}/github-actions/.github/actions/bump-version/bump-version.sh
+      shell: bash
+
+    - name: Bump version in input file
+      id: bump
+      run: ${{ github.workspace }}/github-actions/.github/actions/bump-version/bump-version.sh ./${{ inputs.file }}
+      shell: bash
+
+    - name: Configure Git user
+      run: |
+        git config user.name "${{ github.actor }}"
+        git config user.email "${{ github.actor }}@users.noreply.github.com"
+      shell: bash
+
+    - name: Commit and push version bump 
+      run: |
+        git add ${{ inputs.file }}
+        git commit -m "Bump version to ${{ steps.bump.outputs.new_version }} 🔼 [skip ci]"
+        git push origin HEAD
+      shell: bash
