@@ -1,6 +1,6 @@
 <!-- Logo -->
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maekind/github-actions/main/logo.png">
+  <img src="logo.png">
 </p>
 
 # GitHub Actions Repository
