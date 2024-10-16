@@ -4,6 +4,11 @@ set -e
 
 file="$1"
 
+# Check if the file exists, if not create it and add version=0.0.0
+if [ ! -f "$file" ]; then
+  echo 'version = "0.0.0"' > "$file"
+fi
+
 # Read current version
 current_version=$(grep 'version =' "$file" | sed -E 's/version = "(.*)"/\1/')
 
