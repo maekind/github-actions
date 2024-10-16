@@ -7,7 +7,7 @@ file="$1"
 
 # Check if the file exists, if not create it and add version=0.0.0
 if [ ! -f "$file" ]; then
-  echo 'version = "0.0.0"' > "$file"
+  echo 'version = "0.1.0"' > "$file"
 fi
 
 # Read current version
@@ -22,6 +22,7 @@ IFS='.' read -r major minor patch <<< "$current_version" || {
   exit 1
 }
 
+echo "Current version: $major.$minor.$patch"
 # Increment minor version or handle rollover
 if (( minor < 999 )); then
   ((minor++))
@@ -31,6 +32,8 @@ else
 fi
 
 new_version="$major.$minor.$patch"
+
+echo "New version: $new_version"
 
 # Update the version in the input file
 sed -i.bak "s/version = \"$current_version\"/version = \"$new_version\"/" "$file" || {
