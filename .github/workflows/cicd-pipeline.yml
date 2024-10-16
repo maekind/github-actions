@@ -1,0 +1,53 @@
+name: Create Release ✨
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**/README.md'
+
+jobs:
+  bump-version:
+    name: Bump Version
+    runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.bump-version-step.outputs.new_version }}
+    # Ignore version bump commits to avoid a loop
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    permissions:
+      contents: write  # Required to modify the input file
+    steps:
+      - name: Bump version in VERSION file
+        id: bump-version-step
+        uses: maekind/github-actions/.github/actions/bump-version@main
+        with:
+          file: VERSION
+          gh_token: ${{ secrets.GH_TOKEN }}
+
+  create-tag:
+    name: Create Tag
+    needs: bump-version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:        
+      - name: Create Git Tag
+        uses: maekind/github-actions/.github/actions/create-tag@main
+        with:
+          tag_name: v${{ needs.bump-version.outputs.new_version }}
+          commits: ${{ github.event.pull_request.commits }}
+          title: ${{ github.event.pull_request.title }}
+          description: ${{ github.event.pull_request.body }}
+          emoji: "🚀✨"
+
+  create-release:
+    name: Create Release
+    needs: [bump-version, create-tag]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required for creating a release
+    steps:
+      - name: Create GitHub Release
+        uses: maekind/github-actions/.github/actions/create-release@main
+        with:
+          tag_name: v${{ needs.bump-version.outputs.new_version }}
