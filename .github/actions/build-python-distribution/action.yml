@@ -10,7 +10,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v4
+    - name: Checkout project repository
+      uses: actions/checkout@v4
+
+    - name: Pull latest changes
+      run: git pull
+      shell: bash
 
     - name: Set up Python
       uses: actions/setup-python@v5
