@@ -11,9 +11,6 @@ inputs:
   title:
     description: The PR title to include in the tag description.
     required: true
-  description:
-    description: The PR body description to include in the tag description.
-    required: false
   emoji:
     description: Emojis to add to the tag message.
     required: false
@@ -30,7 +27,7 @@ runs:
         git config user.name "${{ github.actor }}"
         git config user.email "${{ github.actor }}@users.noreply.github.com"
         
-        tag_message="${{ inputs.emoji }} ${{ inputs.title }}: ${{ inputs.description }}"
+        tag_message="${{ inputs.emoji }} ${{ inputs.title }}"
         commits_text="Merged Commits:\n${{ inputs.commits }}"
 
         git tag -a ${{ inputs.tag_name }} -m "$tag_message [skip ci]" -m "$commits_text"

@@ -30,14 +30,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    steps:        
+    steps:
       - name: Create Git Tag
         uses: maekind/github-actions/.github/actions/create-tag@main
         with:
           tag_name: v${{ needs.bump-version.outputs.new_version }}
-          commits: ${{ github.event.pull_request.commits }}
-          title: ${{ github.event.pull_request.title }}
-          description: ${{ github.event.pull_request.body }}
+          commits: ${{ github.event.commits }}
+          title: ${{ github.event.head_commit.message }}
           emoji: "🚀✨"
 
   create-release:
