@@ -31,11 +31,16 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Extract commit messages, from list to string
+        id: extract-commits
+        run: |
+          echo "commit_messages=$(jq -n --argjson commits '${{ toJson(github.event.commits) }}' '$commits | map(.message)')" >> $GITHUB_ENV
+
       - name: Create Git Tag
         uses: maekind/github-actions/.github/actions/create-tag@main
         with:
           tag_name: v${{ needs.bump-version.outputs.new_version }}
-          commits: ${{ github.event.commits }}
+          commits: ${{ steps.extract-commits.outputs.commit_messages }}
           title: ${{ github.event.head_commit.message }}
           emoji: "🚀✨"
 
