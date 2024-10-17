@@ -5,9 +5,6 @@ inputs:
   tag_name:
     description: The tag name to create.
     required: true
-  commits:
-    description: The commit messages to include in the tag description.
-    required: true
   title:
     description: The PR title to include in the tag description.
     required: true
@@ -28,8 +25,7 @@ runs:
         git config user.email "${{ github.actor }}@users.noreply.github.com"
         
         tag_message="${{ inputs.emoji }} ${{ inputs.title }}"
-        commits_text="Merged Commits:\n${{ inputs.commits }}"
 
-        git tag -a ${{ inputs.tag_name }} -m "$tag_message [skip ci]" -m "$commits_text"
+        git tag -a ${{ inputs.tag_name }} -m "$tag_message [skip ci]"
         git push origin ${{ inputs.tag_name }}
       shell: bash
