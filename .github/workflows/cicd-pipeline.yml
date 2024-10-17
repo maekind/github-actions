@@ -34,7 +34,8 @@ jobs:
       - name: Extract commit messages, from list to string
         id: extract-commits
         run: |
-          echo "commit_messages=$(jq -n --argjson commits '${{ toJson(github.event.commits) }}' '$commits | map(.message)')" >> $GITHUB_ENV
+          commit_messages=$(jq -n --argjson commits '${{ toJson(github.event.commits) }}' '$commits | map(.message) | join("\n")')
+          echo "commit_messages=$commit_messages" >> $GITHUB_ENV
 
       - name: Create Git Tag
         uses: maekind/github-actions/.github/actions/create-tag@main
