@@ -19,6 +19,10 @@ runs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Pull latest changes
+      run: git pull
+      shell: bash
+
     - name: Create Git Tag
       run: |
         git config user.name "${{ github.actor }}"
