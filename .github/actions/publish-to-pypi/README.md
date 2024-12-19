@@ -1,6 +1,6 @@
 # `⚠️ DEPRECATED ⚠️`
 
-This GitHub Action is no longer maintained and is considered deprecated. Please use [publish-to-pipy-with-uv](https://github.com/maekind/github-actions/.github/actions/publish-to-pypi-with-uv) action instead.
+This GitHub Action is no longer maintained and is considered deprecated. Please use [publish-to-pipy-with-uv](https://github.com/maekind/github-actions/tree/main/.github/actions/publish-to-pypi-with-uv) action instead.
 
 ---
 
