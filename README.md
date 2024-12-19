@@ -11,7 +11,8 @@ This repository contains reusable GitHub Actions for automating various workflow
 
 - **create-release** - Create a release from the latest tag.
 - **build-python-distribution** - Build Python distribution files, tar.gz and wheel.
-- **publish-to-pypi** - Publish distribution files to PyPI.
+- **publish-to-pypi** `- ⚠️ DEPRECATED ⚠️ -` Publish distribution files to PyPI.
+- **publish-to-pypi-with-uv** - Publish a Python package distribution to PyPI using the `uv` utility.
 - **github-release** - Create and sign GitHub release files.
 - **python-testing-and-coverage** - Run testing and generate coverage report.
 - **upload-codecov-coverage** - Upload coverage report to codecov.

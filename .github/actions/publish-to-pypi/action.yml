@@ -1,6 +1,8 @@
 name: Publish to PyPI
 
-description: Download the built distributions and publish them to PyPI.
+description: |
+  Download the built distributions and publish them to PyPI.
+  `⚠️ DEPRECATED` This action is no longer maintained. Please use publish-to-pipy-with-uv.
 
 runs:
   using: "composite"
