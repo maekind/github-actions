@@ -9,7 +9,7 @@ inputs:
   coverage_path:
     description: The path to the code for coverage reporting.
     required: true
-    default: "./src"  # Default path for coverage
+    default: "./src"
 
 runs:
   using: "composite"
