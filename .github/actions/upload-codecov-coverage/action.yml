@@ -22,7 +22,7 @@ runs:
     - name: Upload code coverage
       uses: codecov/codecov-action@v4
       with:
-        token: ${{ inputs.codecov_token }}  # Use the input for Codecov token
+        token: ${{ inputs.codecov_token }}
         file: ./coverage/coverage.xml
         name: rich
         flags: unittests
