@@ -5,29 +5,25 @@ inputs:
   codecov_token:
     description: The Codecov token for uploading coverage reports.
     required: true
+  python_version:
+    description: The version of Python to use for retrieving the coverage report.
+    required: false
+    default: "3.12"
 
 runs:
   using: "composite"
   steps:
-    - name: Download code coverage
+    - name: Download coverage report
       uses: actions/download-artifact@v4
       with:
-        name: coverage_file-*
-        path: ./coverage # The file is unzipped in a subdirectory
-
-    - name: Combine coverage reports
-      shell: bash
-      run: |
-        pip install coverage
-        coverage combine ./coverage/*/coverage.xml
-        coverage xml -o ./combined_coverage.xml
-
+        name: coverage_file-${{ inputs.python_version }}
+        path: ./coverage
 
     - name: Upload code coverage
       uses: codecov/codecov-action@v4
       with:
         token: ${{ inputs.codecov_token }}  # Use the input for Codecov token
-        file: ./combined_coverage.xml
+        file: ./coverage/coverage.xml
         name: rich
         flags: unittests
         env_vars: OS,PYTHON
